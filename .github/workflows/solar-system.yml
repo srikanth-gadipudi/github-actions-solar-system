@@ -31,9 +31,9 @@ jobs:
         - name: Unit Testing
           run: npm test
           
-        - name: Archive Test Result
-          if: always()
+        - name: Archive Test Resul
           uses: actions/upload-artifact@v3
+          if: always()
           with:
             name: Mocha-Test-Result
             path: test-results.xml

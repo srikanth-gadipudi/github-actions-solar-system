@@ -79,17 +79,17 @@ jobs:
             push: false
             context: .
             tags: |
-              ${{ vars.DOCKER_USERNAME }}/solar-system:latest
-              ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.run_number }}
-              ghcr.io/${{ github.repository_owner }}/solar-system:latest
-              ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.run_number }}
+              ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:latest
+              ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:${{ github.run_number }}
+              ghcr.io/${{ github.repository_owner }}/${{github.repository}}:latest
+              ghcr.io/${{ github.repository_owner }}/${{github.repository}}:${{ github.run_number }}
         - name: run docker image and test 
           run: |
               docker run --name=solar-system -d -p 3000:3000 \
                   -e MONGO_URI=${{ env.MONGO_URI }} \
                   -e MONGO_USERNAME=${{ env.MONGO_USERNAME }} \
                   -e MONGO_PASSWORD=${{ env.MONGO_PASSWORD }} \
-                  ${{ vars.DOCKER_USERNAME }}/solar-system:latest
+                  ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:latest
               export IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' solar-system)
               echo $IP
               echo checking container healthcheck using wget
@@ -100,13 +100,13 @@ jobs:
             push: true
             context: .
             tags: |
-              ${{ vars.DOCKER_USERNAME }}/solar-system:latest
-              ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.run_number }}
-              ghcr.io/${{ github.repository_owner }}/solar-system:latest
-              ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.run_number }}
+              ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:latest
+              ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:${{ github.run_number }}
+              ghcr.io/${{ github.repository_owner }}/${{github.repository}}:latest
+              ghcr.io/${{ github.repository_owner }}/${{github.repository}}:${{ github.run_number }}
         
         - name: cleanup all the docker images all
-          run: docker rmi -f solar-system:${{ github.run_number }} ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.run_number }}
+          run: docker rmi -f ${{github.repository}}:${{ github.run_number }} ${{ vars.DOCKER_USERNAME }}/${{github.repository}}:${{ github.run_number }}
 
 
     dev-deploy:
